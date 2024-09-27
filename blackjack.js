@@ -1,23 +1,64 @@
-// blackjack.js
-let cardOne = 7;
-let cardTwo = 5;
-let sum = cardOne + cardTwo;
-let cardOneBank = 7;
-let cardTwoBank = 5;
-let cardThreeBank = 6;
-let cardFourBank = 4;
-let cardThree = 7;
-sum += cardThree;
+const readline = require("readline");
 
-if (sum > 21) {
-  console.log("You lost");
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+// Helper function to ask questions using Promises
+function askQuestion(query) {
+  return new Promise((resolve) => {
+    rl.question(query, (answer) => {
+      resolve(answer);
+    });
+  });
 }
-console.log(`You have ${sum} points`);
 
-let bankSum = cardOneBank + cardTwoBank + cardThreeBank + cardFourBank;
+let playerScore = 0;
+let dealerScore = 0;
 
-if (bankSum > 21 || (sum <= 21 && sum > bankSum)) {
-  console.log("You win");
-} else {
-  console.log("Bank wins");
+// Main game logic wrapped in an async function to handle the user input flow
+async function playGame() {
+  // Loop for player's turn
+  while (playerScore < 21) {
+    console.log(`Your Score is ${playerScore}.`);
+
+    // Wait for user input before proceeding
+    const input = await askQuestion("Get One More Card? (Y/N) ");
+
+    if (input.toUpperCase() === "Y") {
+      playerScore += Math.floor(Math.random() * 12) + 1;
+    } else if (input.toUpperCase() === "N") {
+      break;
+    } else {
+      console.log("Invalid input, please enter 'Y' or 'N'.");
+    }
+  }
+
+  // Dealer's turn logic
+  while (dealerScore < 17) {
+    dealerScore += Math.floor(Math.random() * 12) + 1;
+  }
+
+  // Determine the result
+  console.log(`Final Scores: Player: ${playerScore}, Dealer: ${dealerScore}`);
+
+  if (playerScore === 21) {
+    console.log("BlackJack!!! You Win!");
+  } else if (dealerScore > 21) {
+    console.log("Dealer Bust!!! You Win!");
+  } else if (playerScore > 21) {
+    console.log("Player Bust... You Lose...");
+  } else if (playerScore > dealerScore) {
+    console.log(`You Win!!! ${playerScore} is over ${dealerScore}!`);
+  } else if (playerScore < dealerScore) {
+    console.log(`You Lose... ${playerScore} is under ${dealerScore}...`);
+  } else {
+    console.log("Draw!");
+  }
+
+  rl.close(); // Close the input interface after the game is done
 }
+
+// Start the game
+playGame();
