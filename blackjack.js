@@ -27,7 +27,7 @@ async function playGame() {
     const input = await askQuestion("Get One More Card? (Y/N) ");
 
     if (input.toUpperCase() === "Y") {
-      playerScore += Math.floor(Math.random() * 12) + 1;
+      playerScore += Math.floor(Math.random() * 13) + 1;
     } else if (input.toUpperCase() === "N") {
       break;
     } else {
@@ -37,7 +37,7 @@ async function playGame() {
 
   // Dealer's turn logic
   while (dealerScore < 17) {
-    dealerScore += Math.floor(Math.random() * 12) + 1;
+    dealerScore += Math.floor(Math.random() * 13) + 1;
   }
 
   // Determine the result
